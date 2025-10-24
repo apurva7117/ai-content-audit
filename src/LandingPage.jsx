@@ -16,7 +16,7 @@ export default function LandingPage() {
             crystal-clear report with exactly what to fix.
           </p>
           <a
-            href="https://tally.so/r/wMZxKN"
+            href="https://tally.so/r/wAo2Wk"
             target="_blank"
             rel="noopener"
             className="inline-block px-6 py-3 bg-black text-white font-semibold rounded-xl hover:bg-gray-800"
@@ -44,7 +44,7 @@ export default function LandingPage() {
           <h2 className="text-2xl font-bold mb-4">🚀 Ready to Fix Your Blog?</h2>
           <p className="mb-6">Try it free on 3 blog posts. We'll send your personalized audit report in 24 hours.</p>
           <a
-            href="https://tally.so/r/wMZxKN"
+            href="https://tally.so/r/wAo2Wk"
             target="_blank"
             rel="noopener"
             className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-500"
@@ -55,9 +55,9 @@ export default function LandingPage() {
 
         <section className="mt-16">
           <iframe 
-            src="https://tally.so/r/wMZxKN?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" 
+            src="https://tally.so/r/wAo2Wk?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" 
             width="100%" 
-            height="500" 
+            height="600" 
             frameBorder="0" 
             marginHeight="0" 
             marginWidth="0" 
