@@ -1,4 +1,7 @@
-import LandingPage from '../src/LandingPage';
+// pages/index.js
+
+import React from "react";
+import LandingPage from "../src/LandingPage";
 
 export default function Home() {
   return <LandingPage />;
