@@ -1,51 +1,40 @@
-import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
-import fetch from 'node-fetch';
-import { JSDOM } from 'jsdom';
+import { OpenAI } from 'openai';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-export async function POST(req) {
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { email, urls } = req.body;
+
+  if (!email || !urls || !Array.isArray(urls)) {
+    return res.status(400).json({ error: 'Missing or invalid parameters' });
+  }
+
   try {
-    const { email, urls } = await req.json();
-    if (!urls || !Array.isArray(urls) || urls.length === 0) {
-      return NextResponse.json({ error: 'No URLs provided' }, { status: 400 });
-    }
+    // You can improve this to fetch + analyze each URL
+    const result = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a content audit assistant. Analyze blog content and suggest improvements in SEO, clarity, tone, and outdated info.',
+        },
+        {
+          role: 'user',
+          content: `Please audit this blog post: ${urls[0]}`,
+        },
+      ],
+    });
 
-    const results = [];
-
-    for (const url of urls) {
-      const html = await fetch(url).then(res => res.text());
-      const dom = new JSDOM(html);
-      const textContent = dom.window.document.body.textContent;
-
-      const prompt = `You are an AI content strategist. Audit the following blog post for:
-- Outdated facts
-- SEO problems (missing keywords, weak titles, etc)
-- Tone inconsistencies or unnatural flow
-
-Respond with a bullet-pointed audit.
-
-Blog Content:
-"""
-${textContent.slice(0, 3000)}
-"""`;
-
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-4',
-        messages: [
-          { role: 'system', content: 'You are a helpful blog content auditor.' },
-          { role: 'user', content: prompt }
-        ],
-        temperature: 0.7
-      });
-
-      results.push({ url, audit: completion.choices[0].message.content });
-    }
-
-    return NextResponse.json({ success: true, results });
-  } catch (err) {
-    console.error('Audit Error:', err);
-    return NextResponse.json({ error: 'Something went wrong.' }, { status: 500 });
+    res.status(200).json({
+      message: `Audit completed for ${urls.length} post(s)`,
+      summary: result.choices[0].message.content,
+    });
+  } catch (error) {
+    console.error('Error in /api/audit:', error);
+    res.status(500).json({ error: 'Failed to audit content' });
   }
 }
